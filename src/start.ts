@@ -1,6 +1,16 @@
 import { createMiddleware, createStart } from '@tanstack/react-start'
 import { authMiddleware } from './middlewares/auth'
 
+const csrfMiddleware = createMiddleware({ type: 'request' }).server(
+  ({ request, next }) => {
+    const url = new URL(request.url)
+
+    console.log(`[${request.method}] ${url.pathname}`)
+
+    return next()
+  },
+)
+
 const loggingMiddleware = createMiddleware({ type: 'request' }).server(
   ({ request, next }) => {
     const url = new URL(request.url)
@@ -13,6 +23,6 @@ const loggingMiddleware = createMiddleware({ type: 'request' }).server(
 
 export const startInstance = createStart(() => {
   return {
-    requestMiddleware: [loggingMiddleware, authMiddleware],
+    requestMiddleware: [loggingMiddleware, csrfMiddleware, authMiddleware],
   }
 })
