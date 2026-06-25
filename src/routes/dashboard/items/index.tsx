@@ -70,26 +70,66 @@ export const Route = createFileRoute('/dashboard/items/')({
   }),
 })
 
-function ItemsGridSkeleton() {
+function RouteComponent() {
+  const { itemsPromise } = Route.useLoaderData()
+  const { status, q } = Route.useSearch()
+  const [searchInput, setSearchInput] = useState(q)
+  const navigate = useNavigate({ from: Route.fullPath })
+
+  useEffect(() => {
+    if (searchInput === q) return
+
+    const timeoutId = setTimeout(() => {
+      navigate({ search: (prev) => ({ ...prev, q: searchInput }) })
+    }, 300)
+
+    return () => clearTimeout(timeoutId)
+  }, [searchInput, navigate, q])
+
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      {[1, 2, 3, 4].map((i) => (
-        <Card key={i} className="overflow-hidden pt-0">
-          <Skeleton className="aspect-video w-full" />
-          <CardHeader className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Skeleton className="h-5 w-20 rounded-full" />
-              <Skeleton className="size-8 rounded-md" />
-            </div>
+    <div className="flex flex-1 flex-col gap-6">
+      <div>
+        <h1 className="text-2xl font-bold">Saved Items</h1>
+        <p className="text-muted-foreground">
+          Your saved articles and content!
+        </p>
+      </div>
 
-            {/* Title */}
-            <Skeleton className="h-6 w-full" />
+      {/* Search and Filter controls */}
+      <div className="flex gap-4">
+        <Input
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search by title or tags"
+        />
+        <Select
+          value={status}
+          onValueChange={(value) =>
+            navigate({
+              search: (prev) => ({
+                ...prev,
+                status: value as typeof status,
+              }),
+            })
+          }
+        >
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="Filter by status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            {Object.values(ItemStatus).map((status) => (
+              <SelectItem key={status} value={status}>
+                {status.charAt(0) + status.slice(1).toLowerCase()}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-            {/* Author  */}
-            <Skeleton className="h-4 w-40" />
-          </CardHeader>
-        </Card>
-      ))}
+      <Suspense fallback={<ItemsGridSkeleton />}>
+        <ItemsList q={q} status={status} data={itemsPromise} />
+      </Suspense>
     </div>
   )
 }
@@ -225,66 +265,26 @@ function ItemsList({
   )
 }
 
-function RouteComponent() {
-  const { itemsPromise } = Route.useLoaderData()
-  const { status, q } = Route.useSearch()
-  const [searchInput, setSearchInput] = useState(q)
-  const navigate = useNavigate({ from: Route.fullPath })
-
-  useEffect(() => {
-    if (searchInput === q) return
-
-    const timeoutId = setTimeout(() => {
-      navigate({ search: (prev) => ({ ...prev, q: searchInput }) })
-    }, 300)
-
-    return () => clearTimeout(timeoutId)
-  }, [searchInput, navigate, q])
-
+function ItemsGridSkeleton() {
   return (
-    <div className="flex flex-1 flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-bold">Saved Items</h1>
-        <p className="text-muted-foreground">
-          Your saved articles and content!
-        </p>
-      </div>
+    <div className="grid gap-6 md:grid-cols-2">
+      {[1, 2, 3, 4].map((i) => (
+        <Card key={i} className="overflow-hidden pt-0">
+          <Skeleton className="aspect-video w-full" />
+          <CardHeader className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-5 w-20 rounded-full" />
+              <Skeleton className="size-8 rounded-md" />
+            </div>
 
-      {/* Search and Filter controls */}
-      <div className="flex gap-4">
-        <Input
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Search by title or tags"
-        />
-        <Select
-          value={status}
-          onValueChange={(value) =>
-            navigate({
-              search: (prev) => ({
-                ...prev,
-                status: value as typeof status,
-              }),
-            })
-          }
-        >
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            {Object.values(ItemStatus).map((status) => (
-              <SelectItem key={status} value={status}>
-                {status.charAt(0) + status.slice(1).toLowerCase()}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+            {/* Title */}
+            <Skeleton className="h-6 w-full" />
 
-      <Suspense fallback={<ItemsGridSkeleton />}>
-        <ItemsList q={q} status={status} data={itemsPromise} />
-      </Suspense>
+            {/* Author  */}
+            <Skeleton className="h-4 w-40" />
+          </CardHeader>
+        </Card>
+      ))}
     </div>
   )
 }

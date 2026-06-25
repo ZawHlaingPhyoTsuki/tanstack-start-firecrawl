@@ -2,15 +2,13 @@ import { MessageResponse } from '@/components/ai-elements/message'
 import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-// import { useCompletion } from '@ai-sdk/react'
+import { useCompletion } from '@ai-sdk/react'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-import { getItemById,
-  //  saveSummaryAndGenerateTagsFn
-   } from '@/data/items'
+import { getItemById, saveSummaryAndGenerateTagsFn } from '@/data/items'
 import { cn } from '@/lib/utils'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import {
@@ -64,37 +62,37 @@ function RouteComponent() {
   const [contentOpen, setContentOpen] = useState(false)
   const router = useRouter()
 
-  // const { completion, complete, isLoading } = useCompletion({
-  //   api: '/api/ai/summary',
-  //   initialCompletion: data.summary ? data.summary : undefined,
-  //   streamProtocol: 'text',
-  //   body: {
-  //     itemId: data.id,
-  //   },
-  //   onFinish: async (_prompt, completionText) => {
-  //     await saveSummaryAndGenerateTagsFn({
-  //       data: {
-  //         id: data.id,
-  //         summary: completionText,
-  //       },
-  //     })
+  const { completion, complete, isLoading } = useCompletion({
+    api: '/api/ai/summary',
+    initialCompletion: data.summary ? data.summary : undefined,
+    streamProtocol: 'text',
+    body: {
+      itemId: data.id,
+    },
+    onFinish: async (_prompt, completionText) => {
+      await saveSummaryAndGenerateTagsFn({
+        data: {
+          id: data.id,
+          summary: completionText,
+        },
+      })
 
-  //     toast.success('Summary generated and saved!')
-  //     router.invalidate()
-  //   },
-  //   onError: (error) => {
-  //     toast.error(error.message)
-  //   },
-  // })
+      toast.success('Summary generated and saved!')
+      router.invalidate()
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 
-  // function handleGenerateSummary() {
-  //   if (!data.content) {
-  //     toast.error('No content available to summarize')
-  //     return
-  //   }
+  function handleGenerateSummary() {
+    if (!data.content) {
+      toast.error('No content available to summarize')
+      return
+    }
 
-  //   complete(data.content)
-  // }
+    complete(data.content)
+  }
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 w-full">
@@ -174,7 +172,7 @@ function RouteComponent() {
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-primary mb-3">
                   Summary
                 </h2>
-{/* 
+
                 {completion || data.summary ? (
                   <MessageResponse>{completion}</MessageResponse>
                 ) : (
@@ -183,10 +181,10 @@ function RouteComponent() {
                       ? 'No summary yet. Generate one with AI.'
                       : 'No content available to summarize.'}
                   </p>
-                )} */}
+                )}
               </div>
 
-              {/* {data.content && !data.summary && (
+              {data.content && !data.summary && (
                 <Button
                   onClick={handleGenerateSummary}
                   disabled={isLoading}
@@ -204,7 +202,7 @@ function RouteComponent() {
                     </>
                   )}
                 </Button>
-              )} */}
+              )}
             </div>
           </CardContent>
         </Card>
