@@ -16,15 +16,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import {
-  type BulkScrapeProgress,
-  bulkScrapeUrlsFn,
-  mapUrlFn,
-  scrapeUrlFn,
-} from '@/data/items'
+import { bulkScrapeUrlsFn, mapUrlFn, scrapeUrlFn } from '@/data/items'
+import type { BulkScrapeProgress } from '@/data/items'
 
 import { bulkImportSchema, importSchema } from '@/schemas/import'
-import { type SearchResultWeb } from 'firecrawl'
+import type { SearchResultWeb } from 'firecrawl'
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute } from '@tanstack/react-router'
 import { Globe, LinkIcon, Loader2 } from 'lucide-react'
@@ -63,7 +59,7 @@ function RouteComponent() {
   const [isPending, startTransition] = useTransition()
   const [bulkIsPending, startBulkTransition] = useTransition()
 
-  //bulk import state
+  // bulk import state
   const [discoveredLinks, setDiscoveredLinks] = useState<
     Array<SearchResultWeb>
   >([])

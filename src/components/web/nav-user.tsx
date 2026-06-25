@@ -19,7 +19,7 @@ import { authClient } from '@/lib/auth-client'
 import { toast } from 'sonner'
 import { useNavigate } from '@tanstack/react-router'
 
-import { type NavUserProps } from '@/lib/types'
+import type { NavUserProps } from '@/lib/types'
 
 export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar()

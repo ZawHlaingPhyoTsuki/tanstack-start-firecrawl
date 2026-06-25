@@ -6,9 +6,8 @@ export const Route = createFileRoute('/')({ component: LandingPage })
 function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
-       {/* Navigation */}
+      {/* Navigation */}
       <Navbar />
-
     </div>
   )
 }

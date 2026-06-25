@@ -40,7 +40,7 @@ export function SignupForm() {
           name: value.fullName,
           email: value.email,
           password: value.password,
-          //callbackURL: '/dashboard',
+          // callbackURL: '/dashboard',
           fetchOptions: {
             onSuccess: () => {
               toast.success('Account creates successfully')

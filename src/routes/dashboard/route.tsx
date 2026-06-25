@@ -1,5 +1,9 @@
 import { Separator } from '#/components/ui/separator'
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '#/components/ui/sidebar'
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from '#/components/ui/sidebar'
 import { AppSidebar } from '#/components/web/app-sidebar'
 import { getSessionFn } from '#/data/session'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
@@ -10,9 +14,9 @@ export const Route = createFileRoute('/dashboard')({
     const session = await getSessionFn()
 
     return {
-      user: session.user
+      user: session.user,
     }
-  }
+  },
 })
 
 function RouteComponent() {

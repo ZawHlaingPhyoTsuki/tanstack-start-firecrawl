@@ -1,18 +1,14 @@
 import { prisma } from '@/db'
 import { firecrawl } from '@/lib/firecrawl'
-import {
-  bulkImportSchema,
-  extractSchema,
-  importSchema,
-  searchSchema,
-} from '@/schemas/import'
+import type { extractSchema } from '@/schemas/import'
+import { bulkImportSchema, importSchema, searchSchema } from '@/schemas/import'
 import { createServerFn } from '@tanstack/react-start'
 import z from 'zod'
 import { authFnMiddleware } from '@/middlewares/auth'
 import { notFound } from '@tanstack/react-router'
 import { generateText } from 'ai'
 import { openrouter } from '@/lib/openRouter'
-import { type SearchResultWeb } from 'firecrawl'
+import type { SearchResultWeb } from 'firecrawl'
 
 export const scrapeUrlFn = createServerFn({ method: 'POST' })
   .middleware([authFnMiddleware])
@@ -32,7 +28,7 @@ export const scrapeUrlFn = createServerFn({ method: 'POST' })
           'markdown',
           {
             type: 'json',
-            //schema: extractSchema,
+            // schema: extractSchema,
             prompt: 'please extract the author and also publishedAt timestamp',
           },
         ],
@@ -132,7 +128,7 @@ export const bulkScrapeUrlsFn = createServerFn({ method: 'POST' })
             'markdown',
             {
               type: 'json',
-              //schema: extractSchema,
+              // schema: extractSchema,
               prompt:
                 'please extract the author and also publishedAt timestamp',
             },
@@ -193,7 +189,7 @@ export const bulkScrapeUrlsFn = createServerFn({ method: 'POST' })
 export const getItemsFn = createServerFn({ method: 'GET' })
   .middleware([authFnMiddleware])
   .handler(async ({ context }) => {
-    //await new Promise((resolve) => setTimeout(resolve, 1000))
+    // await new Promise((resolve) => setTimeout(resolve, 1000))
 
     const items = await prisma.savedItem.findMany({
       where: {

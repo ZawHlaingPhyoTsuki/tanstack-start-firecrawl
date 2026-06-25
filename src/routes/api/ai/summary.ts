@@ -35,7 +35,7 @@ Your summaries should:
           prompt: `Please summarize the following content:\n\n${prompt}`,
         })
 
-        //Return the stream in the format useCompletion expects
+        // Return the stream in the format useCompletion expects
         return result.toTextStreamResponse()
       },
     },
